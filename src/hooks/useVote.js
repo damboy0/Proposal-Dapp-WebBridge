@@ -47,7 +47,24 @@ const useVote = () => {
         return;
       } catch (error) {
         console.error("Error while voting: ", error);
-        toast.error("Vote errored", error);
+
+        
+        if (
+          error.reason === "Already voted on this proposal" ||
+          (error.revert && error.revert.args[0] === "Already voted on this proposal")
+        ) {
+          toast.error("You have already voted on this proposal.");
+          return;
+        }
+
+        // rejection error MetaMask
+        if (error.code === 4001) {
+          toast.error("Transaction rejected by the user.");
+          return;
+        }
+
+        // General error fallback
+        toast.error("An error occurred during the vote. Please try again.");
       } finally {
         setIsLoading(false);
       }
