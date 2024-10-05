@@ -14,7 +14,7 @@ const useExecute = () => {
 
   const execute = useCallback(
     async (proposalId) => {
-      if (!proposalId) {git 
+      if (!proposalId) {
         toast.error("Proposal ID is required");
         return;
       }
@@ -46,7 +46,16 @@ const useExecute = () => {
         toast.error("Execution failed");
         return;
       } catch (error) {
-        console.error("Error while voting: ", error);
+        console.error("Error while executing: ", error);
+
+        
+        if (
+          error.reason === "Voting period has not ended" ||
+          (error.revert && error.revert.args[0] === "Voting period has not ended")
+        ) {
+          toast.error("Cannot execute the proposal yet. The voting period has not ended.");
+          return;
+        }
 
         
         if (
@@ -57,7 +66,7 @@ const useExecute = () => {
           return;
         }
 
-        // rejection error MetaMask
+        // Handle rejection error (MetaMask)
         if (error.code === 4001) {
           toast.error("Transaction rejected by the user.");
           return;
@@ -71,6 +80,7 @@ const useExecute = () => {
     },
     [address, chainId, contract]
   );
+
   return { execute, isLoading };
 };
 

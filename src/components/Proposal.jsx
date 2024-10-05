@@ -17,9 +17,9 @@ const Proposal = ({
 
   const canExecute = Number(votecount) >= Number(minRequiredVote) && !executed;
 
-  console.log(`Proposal ID: ${proposalId}`);
-  console.log(`votecount: ${Number(votecount)}, minRequiredVote: ${Number(minRequiredVote)}, executed: ${executed}`);
-  console.log(`canExecute: ${canExecute}`);
+  // console.log(`Proposal ID: ${proposalId}`);
+  // console.log(`votecount: ${Number(votecount)}, minRequiredVote: ${Number(minRequiredVote)}, executed: ${executed}`);
+  // console.log(`canExecute: ${canExecute}`);
 
   return (
     <Box className="bg-slate-400 rounded-md shadow-sm p-4 w-96">
