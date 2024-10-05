@@ -10,6 +10,8 @@ import { Modal } from "./components/Modal";
 function App() {
   const readOnlyProposalContract = useContract(true);
   const { readOnlyProvider } = useRunners();
+
+  
   const { proposals, fetchProposals } = useProposals(
     readOnlyProposalContract,
     readOnlyProvider

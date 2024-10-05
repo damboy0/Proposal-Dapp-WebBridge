@@ -5,14 +5,14 @@ import { useAppKitAccount } from "@reown/appkit/react";
 import { useAppKitNetwork } from "@reown/appkit/react";
 import { liskSepoliaNetwork } from "../connection";
 
-const useVote = () => {
+const useExecute = () => {
   const contract = useContract(true);
   const { address } = useAppKitAccount();
   const { chainId } = useAppKitNetwork();
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const vote = useCallback(
+  const execute = useCallback(
     async (proposalId) => {
       if (!proposalId) {git 
         toast.error("Proposal ID is required");
@@ -33,17 +33,17 @@ const useVote = () => {
 
       try {
         setIsLoading(true);
-        const estimatedGas = await contract.vote.estimateGas(proposalId);
-        const tx = await contract.vote(proposalId, {
+        const estimatedGas = await contract.executeProposal.estimateGas(proposalId);
+        const tx = await contract.executeProposal(proposalId, {
           gasLimit: (estimatedGas * BigInt(120)) / BigInt(100),
         });
         const receipt = await tx.wait();
 
         if (receipt.status === 1) {
-          toast.success("Vote successful");
+          toast.success("Execution successful");
           return;
         }
-        toast.error("Vote failed");
+        toast.error("Execution failed");
         return;
       } catch (error) {
         console.error("Error while voting: ", error);
@@ -64,14 +64,14 @@ const useVote = () => {
         }
 
         // General error fallback
-        toast.error("An error occurred during the vote. Please try again.");
+        toast.error("An error occurred during the Execute. Please try again.");
       } finally {
         setIsLoading(false);
       }
     },
     [address, chainId, contract]
   );
-  return { vote, isLoading };
+  return { execute, isLoading };
 };
 
-export default useVote;
+export default useExecute;
